@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ProductItem from './ProductItem';
-import { Link } from 'react-router-dom'
 
 const PRODUCT_QUERY = `
 {
@@ -34,7 +33,6 @@ export class ProductsList extends Component {
       super();
       this.state = {
          productsInfo: [],
-         hui: 'samir'
       }
    }
 
@@ -52,9 +50,13 @@ export class ProductsList extends Component {
 
 
    render() {
+      const productList = React.Children.toArray (this.state.productsInfo.map(productInfo => (((this.props.currentCategory === 'all') || 
+      (this.props.currentCategory === productInfo.category)) && (<ProductItem key={productInfo.id} product={productInfo} 
+      currentCurrency={this.props.currentCurrency} getData={this.props.getData} getBoughtItem = {this.props.getBoughtItem} />))))
+
       return (
       <div className='products-list'>
-         {this.state.productsInfo.map(productInfo => (((this.props.chosenCategory === 'all') || (this.props.chosenCategory === productInfo.category)) && (<ProductItem key={productInfo.id} product={productInfo} currentCurrency={this.props.currentCurrency} getData={this.props.getData} />)))}
+         {productList}
       </div>
       )
    }
@@ -62,10 +64,3 @@ export class ProductsList extends Component {
 
 export default ProductsList
 
-
-/* 
-{this.state.productsInfo.map(productInfo => {
-            (this.props.chosenCategory == 'all' || this.props.chosenCategory == productInfo.category && (
-               <ProductItem key={productInfo.id} product={productInfo} currentCurrency={this.props.currentCurrency} />
-            ) ) })}
-            */

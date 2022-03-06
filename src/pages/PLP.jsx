@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
 import ProductsList from '../components/products/ProductsList'
 
-const CATEGORIES_QUERY = `
-{
-   categories {
-      name
-   }
-}`
 
 export class Category extends Component {
    constructor() {
@@ -18,21 +12,8 @@ export class Category extends Component {
       }
    }
 
-   componentDidMount() {
-      fetch("http://localhost:4000/", {
-         method: "POST",
-         headers: { "Content-Type": "application/json"},
-         body: JSON.stringify({ query: CATEGORIES_QUERY})
-      })
-      .then((response) => response.json())
-      .then(categoriesObj => {
-         this.setState({categoriesList: categoriesObj.data.categories.map(category => category.name)})
 
-      })
-
-
-   }
-
+   /* Getting chosen category value */
    chooseCategory(e) {
       this.setState({chosenCategory: e.target.value})
    }
@@ -43,16 +24,12 @@ export class Category extends Component {
          <div className="container">
             <div className="categories">
                <div className="categories-header">
-                  <h1>Category name</h1>
-               </div>
-               <div className="categories-buttons">
-                  {this.state.categoriesList.map(category => (
-                     <button key={category} className={this.state.chosenCategory === category && 'active'} onClick={this.chooseCategory} value={category}>{category.toUpperCase()}</button>
-                  ))}
+                  <h1 style={{textTransform: 'uppercase', fontWeight: '400'}}>{this.props.currentCategory}</h1>
                </div>
             </div>
             <div className="item-list">
-               <ProductsList currentCurrency={this.props.currentCurrency} chosenCategory={this.state.chosenCategory} getData = {this.props.getData} />
+               <ProductsList currentCurrency={this.props.currentCurrency} 
+               currentCategory={this.props.currentCategory} getData = {this.props.getData} getBoughtItem = {this.props.getBoughtItem} />
             </div>
          </div>
       </div>
