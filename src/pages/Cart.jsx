@@ -13,15 +13,17 @@ export class Cart extends Component {
    /* Getting price for total from CartProductItem child */
    getPriceForTotal = price => {
       this.setState(prevState => ({total: {...prevState.total, [`${price.id}`]: price.amount}}))
-      Object.keys(this.state.total).map(key => {
-         this.setState({totalValue: 0 + this.state.total[key]})
-         return null
-      })
+      setTimeout(() => {
+         this.props.getTotalPrice(this.state.total)
+         }, 1)
    }
 
    /* Getting amount for total amount from CartProductItem child */
    getAmount = quantity => {
       this.setState(prevState => ({totalQuantity: {...prevState.totalQuantity, [`${quantity.id}`]: quantity.amount}}))
+      setTimeout(() => {
+         this.props.getTotalQuantity(this.state.totalQuantity)
+         }, 1)
    }
 
    render() {
@@ -38,10 +40,12 @@ export class Cart extends Component {
                   let totalMoneyObj = this.state.total
                   delete totalMoneyObj[`${item.productInfo.id}${item.chosenAttributes[Object.keys(item.chosenAttributes)[0]]}`]
                   delete totalQuantityObj[`${item.productInfo.id}${item.chosenAttributes[Object.keys(item.chosenAttributes)[0]]}`]
-                  this.setState({totalQuantity: totalQuantityObj})}}>Remove Item</button>
+                  this.setState({totalQuantity: totalQuantityObj})
+                  this.props.getTotalQuantity(totalQuantityObj)
+                  }}>Remove Item</button>
             </div>
             <CartProductItem key={item} item = {item} currentCurrency = {this.props.currentCurrency} 
-            getPriceForTotal = {this.getPriceForTotal} getAmount={this.getAmount}  />
+            getPriceForTotal = {this.getPriceForTotal} getAmount={this.getAmount} />
             </>
          )
       }))
@@ -58,8 +62,8 @@ export class Cart extends Component {
                <div className="cart-page-items">
                {cartPageItems}
                </div>
-               <div className="card-overlay-view-content-totalprice">Total: {Object.keys(this.state.total).map(key => {
-                           val+= this.state.total[key]
+               <div className="card-overlay-view-content-totalprice">Total: {Object.keys(this.props.totalPrice).map(key => {
+                           val+= this.props.totalPrice[key]
                            val = Math.round(val * 100) / 100
                            return null})}{this.state.currentCurrency}{val}</div>
                <Link onClick={() => this.setState({cartDropdownActive: false})} 

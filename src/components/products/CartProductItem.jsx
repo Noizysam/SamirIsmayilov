@@ -104,7 +104,8 @@ export class CartProductItem extends Component {
                   <p>{this.state.amount}</p>
                </div>
                   <button disabled={(this.state.amount === 1) && true} 
-                  style={{opacity: (this.state.amount === 1) && '50%', cursor: (this.state.amount === 1) && 'default'}} onClick={this.decreaseButton}><div className="card-overlay-view-content-item-amount-decrease">-</div>
+                  style={{opacity: (this.state.amount === 1) && '50%', cursor: (this.state.amount === 1) && 'default'}} 
+                  onClick={this.decreaseButton}><div className="card-overlay-view-content-item-amount-decrease">-</div>
                      </button>
             </div>
             <div className="card-overlay-view-content-item-gallery">

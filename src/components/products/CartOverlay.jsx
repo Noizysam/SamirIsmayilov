@@ -17,6 +17,7 @@ export class CartOverlay extends Component {
 
    componentDidMount () {
       document.addEventListener('click', this.handleOutsideClick)
+
    }
 
    /* Handle outside click to close cart overlay on click outside */
@@ -42,11 +43,17 @@ export class CartOverlay extends Component {
    /* Getting price for total from CartProductItem child */
    getPriceForTotal = price => {
       this.setState(prevState => ({total: {...prevState.total, [`${price.id}`]: price.amount}}))
+      setTimeout(() => {
+         this.props.getTotalPrice(this.state.total)
+         }, 1)
    }
 
    /* Getting amount for total amount from CartProductItem child */
    getAmount = quantity => {
       this.setState(prevState => ({totalQuantity: {...prevState.totalQuantity, [`${quantity.id}`]: quantity.amount}}))
+      setTimeout(() => {
+      this.props.getTotalQuantity(this.state.totalQuantity)
+      }, 1)
    }
 
    /* When we press 'view bag' button, then we close cart overlay and removing darkness */
@@ -72,6 +79,7 @@ export class CartOverlay extends Component {
                      delete totalMoneyObj[`${item.productInfo.id}${item.chosenAttributes[Object.keys(item.chosenAttributes)[0]]}`]
                      delete totalQuantityObj[`${item.productInfo.id}${item.chosenAttributes[Object.keys(item.chosenAttributes)[0]]}`]
                      this.setState({totalQuantity: totalQuantityObj})
+                     this.props.getTotalQuantity(totalQuantityObj)
                   }}>Remove Item</button>
                </div>
                <CartProductItem key={item} item = {item} currentCurrency = {this.props.currentCurrency} 
@@ -84,8 +92,8 @@ export class CartOverlay extends Component {
          <div className="cart-overlay" ref={this.box}>
             <button className="cart-overlay-btn" onClick={this.openOverlay}>
                <img src={Cart} alt="" />
-               <div className="cart-overlay-btn-amount-info">{Object.keys(this.state.totalQuantity).map(key => {
-                  quantityVal+= this.state.totalQuantity[key]
+               <div className="cart-overlay-btn-amount-info">{Object.keys(this.props.totalQuantity).map(key => {
+                  quantityVal+= this.props.totalQuantity[key]
                   return null
                })}{quantityVal}</div>
             </button>
@@ -93,8 +101,8 @@ export class CartOverlay extends Component {
                <div className='card-overlay-view-content'>
                   <p>My bag, {this.props.boughtItems.length} items</p>
                   {CartOverlayItems}
-                  <div className="card-overlay-view-content-totalprice">Total: {Object.keys(this.state.total).map(key => {
-                     val+= this.state.total[key]
+                  <div className="card-overlay-view-content-totalprice">Total: {Object.keys(this.props.totalPrice).map(key => {
+                     val+= this.props.totalPrice[key]
                      val = Math.round(val * 100) / 100
                      return null})}{this.props.currentCurrency}{val}</div>
                   <div className="card-overlay-view-content-buttons">

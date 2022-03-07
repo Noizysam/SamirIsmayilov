@@ -116,9 +116,11 @@ export class Navbar extends Component {
                   </div>
                </div>
                <div ref={this.box}>
-                  <CartOverlay  totalQuantity = {this.state.totalQuantity} boughtItems = {this.props.boughtItems} 
+                  <CartOverlay getTotalQuantity={this.props.getTotalQuantity}  
+                  totalQuantity = {this.props.totalQuantity} boughtItems = {this.props.boughtItems} 
                   getDeletedItem = {this.props.getDeletedItem} currentCurrency = {this.state.currentCurrency} 
-                  getIfCartOverlayActive = {this.props.getIfCartOverlayActive} isClickedOutside = {this.state.isClickedOutside} />
+                  getIfCartOverlayActive = {this.props.getIfCartOverlayActive} isClickedOutside = {this.state.isClickedOutside} 
+                  getTotalPrice={this.props.getTotalPrice} totalPrice={this.props.totalPrice} />
                </div>
             </div>
          </div>

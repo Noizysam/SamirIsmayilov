@@ -18,10 +18,10 @@ class App extends React.Component {
       productInfo: [],
       boughtItems: [],
       deletedItem: null,
-      boughtItemsClone: [],
       currentCategory: 'all',
-      amountFromCart: 0,
-      isCartOverlayActive: false
+      totalQuantity: {},
+      isCartOverlayActive: false,
+      totalPrice: {}
     };
   }
 
@@ -49,7 +49,6 @@ class App extends React.Component {
   /* Getting items that we want to delete */
   getDeletedItem = val => {
     this.setState({deletedItem: val})
-    this.setState({boughtItemsClone: this.state.boughtItems.filter(function(item) {return item !== val} )})
     this.setState({boughtItems: this.state.boughtItems.filter(function(item) {return item !== val} )})
   }
 
@@ -66,6 +65,16 @@ class App extends React.Component {
     this.setState({isCartOverlayActive: boolean})
   }
 
+  /* Get total quantity in global App component */
+  getTotalQuantity = obj => {
+    this.setState({totalQuantity: obj})
+  }
+
+  /* Get total price in global App component */
+  getTotalPrice = obj => {
+    this.setState({totalPrice: obj})
+  }
+
 
 
   render() {
@@ -73,17 +82,25 @@ class App extends React.Component {
     <div className="App">
       <Router>
         <div>
-          <Navbar sendData = {this.getDataFromChild} boughtItems = {this.state.boughtItems} getDeletedItem = {this.getDeletedItem.bind(this)} 
-          getCurrentCategory = {this.getCurrentCategory} getIfCartOverlayActive = {this.getIfCartOverlayActive} />
+          <Navbar sendData = {this.getDataFromChild} boughtItems = {this.state.boughtItems} 
+          getDeletedItem = {this.getDeletedItem.bind(this)} 
+          getCurrentCategory = {this.getCurrentCategory} getIfCartOverlayActive = {this.getIfCartOverlayActive} 
+          totalQuantity = {this.state.totalQuantity} getTotalQuantity={this.getTotalQuantity} 
+          getTotalPrice={this.getTotalPrice} totalPrice={this.state.totalPrice}/>
           <main style={{backgroundColor: (this.state.isCartOverlayActive) && 'rgba(57, 55, 72, 0.22)', 
           filter: (this.state.isCartOverlayActive) && 'brightness(82%)'} }>
             <Routes>
-              <Route path='/' element={<PLP currentCurrency={this.state.currentCurrency} getData = {this.getDataFromChild2} 
+              <Route path='/' element={<PLP currentCurrency={this.state.currentCurrency} 
+              getData = {this.getDataFromChild2} 
               currentCategory={this.state.currentCategory} getBoughtItem = {this.getDataFromChild3} />} />
-              <Route path='/product/:id' element={<PDP currentCurrency={this.state.currentCurrency} productInfo={this.state.productInfo} 
+              <Route path='/product/:id' element={<PDP currentCurrency={this.state.currentCurrency} 
+              productInfo={this.state.productInfo} 
               getData = {this.getDataFromChild3} />} />
-              <Route path='/cart' element={<Cart currentCurrency={this.state.currentCurrency} boughtItems = {this.state.boughtItems} 
-              getDeletedItem={this.getDeletedItem.bind(this)} />}  />
+              <Route path='/cart' element={<Cart currentCurrency={this.state.currentCurrency} 
+              boughtItems = {this.state.boughtItems} 
+              getDeletedItem={this.getDeletedItem.bind(this)} totalQuantity = {this.state.totalQuantity} 
+              getTotalQuantity={this.getTotalQuantity} getTotalPrice={this.getTotalPrice} 
+              totalPrice={this.state.totalPrice} />}  />
             </Routes>
           </main>
         </div>
